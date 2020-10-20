@@ -84,7 +84,18 @@ public class EksamenSBinTre<T> {
     }
 
     public boolean leggInn(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        //Sjekke at verdi ikke er null
+
+        //Løkke som sammenlikner verdi med verdier i treet.
+
+        //Hopper til høyre om verdi er større enn en nodes verdi.
+        //Hopper til venstre om verdi er mindre enn en nodes verdi.
+
+        //Går ut av løkken når man kommer til en node med child peker som peker på null.
+
+        //Opprett en ny node på plassen man fant i løkken over.
+
+        return true;
     }
 
     public boolean fjern(T verdi) {
