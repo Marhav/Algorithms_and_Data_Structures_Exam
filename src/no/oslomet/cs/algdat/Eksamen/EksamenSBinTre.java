@@ -86,20 +86,17 @@ public class EksamenSBinTre<T> {
 
         //Løkke som sammenlikner verdi med verdier i treet.
         Node<T> current = rot;
+        Node<T> currentLast = null;
         int comparator = 0;
-        while(current.høyre !=null || current.venstre != null) {              //Går ut av løkken når man kommer til en node med child peker som peker på null.
+        while(current !=null) {                                               //Går ut av løkken når man kommer til en node med child peker som peker på null.
+            currentLast = current;
             comparator = comp.compare(verdi, current.verdi);
             current = comparator > 0 ? current.høyre : current.venstre;       //Hopper til høyre om verdi er større enn en nodes verdi, eller til venstre dersom verdi er mindre.
         }
 
         //Opprett en ny node på plassen man fant i løkken over.
-        if(comparator > 0) {
-            current.høyre = new Node<>(verdi, null, null, current);
-        } else if(comparator < 0){
-            current.venstre = new Node<>(verdi, null, null, current);
-        }
-
-
+        current = new Node<>(verdi, null, null, currentLast);
+        antall++;
         return true;
     }
 
