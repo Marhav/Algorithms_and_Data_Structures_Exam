@@ -145,8 +145,25 @@ public class EksamenSBinTre<T> {
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
         Node<T> q = førstePostorden(p);
+        Node<T> r = q.forelder;
+        //p er rotnoden(siste i postorden)
+        if(r == null){
+            return null;
+        }
+        //Hvis p er venstre barn til sin forelder f, gjelder:
+            //Hvis p er enebarn (f.høyre er null), er forelderen f den neste.
+            //Hvis p ikke er enebarn (dvs. f.høyre er ikke null), så er den neste den noden som kommer først i postorden i subtreet med f.høyre som rot.
+        if(r.venstre.equals(q)){
+            if(r.høyre.equals(null)){
+                return r;
+            }
+            else{
+                førstePostorden(r.høyre);
+            }
+        }
+        //p er høyre barn til sin forelder f
+        return r;
 
-        return p;
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
