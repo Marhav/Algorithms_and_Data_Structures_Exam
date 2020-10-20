@@ -144,7 +144,9 @@ public class EksamenSBinTre<T> {
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        Node<T> q = førstePostorden(p);
+
+        return p;
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
