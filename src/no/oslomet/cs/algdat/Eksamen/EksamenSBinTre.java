@@ -85,17 +85,23 @@ public class EksamenSBinTre<T> {
         Objects.requireNonNull(verdi, "Kan ikke legge til nullverdier i binærtreet!");
 
         //Løkke som sammenlikner verdi med verdier i treet.
+        //Brukt Programkode 5.2.3 a) som referanse.
         Node<T> current = rot;
         Node<T> currentLast = null;
         int comparator = 0;
         while(current !=null) {                                               //Går ut av løkken når man kommer til en node med child peker som peker på null.
             currentLast = current;
             comparator = comp.compare(verdi, current.verdi);
-            current = comparator > 0 ? current.høyre : current.venstre;       //Hopper til høyre om verdi er større enn en nodes verdi, eller til venstre dersom verdi er mindre.
+            current = comparator < 0 ? current.venstre : current.høyre;       //Hopper til høyre om verdi er større enn en nodes verdi, eller til venstre dersom verdi er mindre.
         }
 
         //Opprett en ny node på plassen man fant i løkken over.
         current = new Node<>(verdi, currentLast);
+
+        if (currentLast== null) rot = current;                  // p blir rotnode
+        else if (comparator < 0) currentLast.venstre = current;         // venstre barn til q
+        else currentLast.høyre = current;
+
         antall++;
         return true;
     }
@@ -108,18 +114,20 @@ public class EksamenSBinTre<T> {
         throw new UnsupportedOperationException("Ikke kodet ennå!");
     }
 
-    public int antall(T verdi) {    //Sjekket hvordan inneholder fungerer, tror ikke den kan brukes her, men en liknende metode som fortsetter å lete, selv etter funn kan fungere.
+    public int antall(T verdi) {                //Sjekket hvordan inneholder fungerer, tror ikke den kan brukes her, men en liknende metode som fortsetter å lete, selv etter funn kan fungere.
         int teller = 0;
-        //Her har jeg kopiert og modifisert kode fra inneholder metoden.
-        if (verdi == null) return teller; //Sjekker om verdi er null, returnerer evt 0 som oppgaven ber om.
+                                                //Her har jeg kopiert og modifisert kode fra inneholder(T verdi) metoden.
+        if (verdi == null) return teller;       //Sjekker om verdi er null, returnerer evt 0 som oppgaven ber om.
 
         Node<T> p = rot;
 
         while (p != null) {
             int cmp = comp.compare(verdi, p.verdi);
-            if(cmp == 0) teller++;
-            else if (cmp < 0) p = p.venstre;
-            else p = p.høyre;
+            if(cmp == 0){
+                teller++;
+                p = p.høyre;
+            }
+            else p = cmp < 0 ? p.venstre : p.høyre;
         }
         return teller;
     }
