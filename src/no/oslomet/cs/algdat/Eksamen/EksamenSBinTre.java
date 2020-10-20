@@ -95,7 +95,7 @@ public class EksamenSBinTre<T> {
         }
 
         //Opprett en ny node på plassen man fant i løkken over.
-        current = new Node<>(verdi, null, null, currentLast);
+        current = new Node<>(verdi, currentLast);
         antall++;
         return true;
     }
@@ -108,8 +108,20 @@ public class EksamenSBinTre<T> {
         throw new UnsupportedOperationException("Ikke kodet ennå!");
     }
 
-    public int antall(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+    public int antall(T verdi) {    //Sjekket hvordan inneholder fungerer, tror ikke den kan brukes her, men en liknende metode som fortsetter å lete, selv etter funn kan fungere.
+        int teller = 0;
+        //Her har jeg kopiert og modifisert kode fra inneholder metoden.
+        if (verdi == null) return teller; //Sjekker om verdi er null, returnerer evt 0 som oppgaven ber om.
+
+        Node<T> p = rot;
+
+        while (p != null) {
+            int cmp = comp.compare(verdi, p.verdi);
+            if(cmp == 0) teller++;
+            else if (cmp < 0) p = p.venstre;
+            else p = p.høyre;
+        }
+        return teller;
     }
 
     public void nullstill() {
