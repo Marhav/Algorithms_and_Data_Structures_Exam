@@ -98,9 +98,9 @@ public class EksamenSBinTre<T> {
         //Opprett en ny node på plassen man fant i løkken over.
         current = new Node<>(verdi, currentLast);
 
-        if (currentLast== null) rot = current;                  // p blir rotnode
-        else if (comparator < 0) currentLast.venstre = current;         // venstre barn til q
-        else currentLast.høyre = current;
+        if (currentLast== null) rot = current;                                  // Current blir rotnode
+        else if (comparator < 0) currentLast.venstre = current;                 // Venstre barn blir current
+        else currentLast.høyre = current;                                       // Høyre barn blir currnet
 
         antall++;
         return true;
@@ -137,7 +137,10 @@ public class EksamenSBinTre<T> {
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+
+        if(p.venstre != null) return førstePostorden(p.venstre);
+        else if(p.høyre != null) return førstePostorden(p.høyre);
+        else return p;
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
