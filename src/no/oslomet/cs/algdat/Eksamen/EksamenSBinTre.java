@@ -1,10 +1,7 @@
 package no.oslomet.cs.algdat.Eksamen;
 
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class EksamenSBinTre<T> {
     private static final class Node<T>   // en indre nodeklasse
@@ -85,15 +82,23 @@ public class EksamenSBinTre<T> {
 
     public boolean leggInn(T verdi) {
         //Sjekke at verdi ikke er null
+        Objects.requireNonNull(verdi, "Kan ikke legge til nullverdier i binærtreet!");
 
         //Løkke som sammenlikner verdi med verdier i treet.
-
-        //Hopper til høyre om verdi er større enn en nodes verdi.
-        //Hopper til venstre om verdi er mindre enn en nodes verdi.
-
-        //Går ut av løkken når man kommer til en node med child peker som peker på null.
+        Node<T> current = rot;
+        int comparator = 0;
+        while(current.høyre !=null || current.venstre != null) {              //Går ut av løkken når man kommer til en node med child peker som peker på null.
+            comparator = comp.compare(verdi, current.verdi);
+            current = comparator > 0 ? current.høyre : current.venstre;       //Hopper til høyre om verdi er større enn en nodes verdi, eller til venstre dersom verdi er mindre.
+        }
 
         //Opprett en ny node på plassen man fant i løkken over.
+        if(comparator > 0) {
+            current.høyre = new Node<>(verdi, null, null, current);
+        } else if(comparator < 0){
+            current.venstre = new Node<>(verdi, null, null, current);
+        }
+
 
         return true;
     }
