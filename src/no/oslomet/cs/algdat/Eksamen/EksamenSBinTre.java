@@ -182,20 +182,20 @@ public class EksamenSBinTre<T> {
         ArrayList<T> list = new ArrayList<T>();
 
         //Opprette deque
-        ArrayDeque<Node<T>> kø = new ArrayDeque<Node<T>>();
+        ArrayDeque<Node<T>> que = new ArrayDeque<Node<T>>();
 
         //Traversere binærtreet i nivå orden og flytte verdiene over i en deque.
         Node<T> p = rot;
-        kø.addLast(p);
-        while (!kø.isEmpty()) { //Gå igjennom deque og flytte verdiene inn i arraylist
-            p = kø.removeFirst();
+        que.addLast(p);
+        while (!que.isEmpty()) { //Gå igjennom deque og flytte verdiene inn i arraylist
+            p = que.removeFirst();
             list.add(p.verdi);
 
             if (p.venstre != null) {
-                kø.addLast(p.venstre);
+                que.addLast(p.venstre);
             }
             if (p.høyre != null) {
-                kø.addLast(p.høyre);
+                que.addLast(p.høyre);
             }
         }
         //Returnere arraylist
@@ -204,35 +204,8 @@ public class EksamenSBinTre<T> {
 
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
         EksamenSBinTre<K> tre = new EksamenSBinTre<K>(c);
-
-        tre.rot = new Node<K>(data.get(0), null);
-
-        Node<K> current = tre.rot;
-
-        int cmp;
-        for (int i = 1; i < data.size(); i++){
-            cmp = c.compare(data.get(i), current.verdi);
-            if(cmp>=0){
-                current.høyre = new Node<K>(data.get(i), current);
-            } else if(cmp<0){
-                current.venstre = new Node<K>(data.get(i), current);
-            }
-            //Om current ikke har forelder:
-                //Hvis forelder har venstre barn, sett current lik venstre barn
-                //Hvis forelder ikke har venstre barn, sett current lik høyre barn.
-            //Om current er venstre barn:
-                //Hvis forelder har høyre barn, sett current lik forelders høyre barn.
-                //Hvis forelder ikke har høyre barn:
-                    //Hvis current har venstre barn, sett current lik venstre barn.
-                    //Hvis current ikke har venstre barn, sett current lik høyre barn.
-            //Om current er høyre barn:
-                //Hvis current sin forelder har venstre barn:
-                    //Hvis current sin forelder har venstre barnebarn, sett current lik forelders venstre-venstre barnebarn.(Forelder.venstre.venstre)
-                    //Hvis current sin forelder ikke har venstre barnebarn, sett current lik forelders venstre-høyre barnebarn. (forelser.venstre.høyre)
-                //Hvis current sin forelder ikke har venstre barn:
-                    //Hvis current har venstre barn, sett current lik venstre barn.
-                    //Hvis current ikke har venstre barn, sett current lik høyre barn.
-
+        for (int i = 0; i < data.size(); i++){
+            tre.leggInn(data.get(i));
         }
         return tre;
     }
