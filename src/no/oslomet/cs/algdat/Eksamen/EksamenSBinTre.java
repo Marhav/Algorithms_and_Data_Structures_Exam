@@ -182,7 +182,21 @@ public class EksamenSBinTre<T> {
         ArrayList<T> list = new ArrayList<>();
 
         //Opprette deque
+        ArrayDeque<T> kø = new ArrayDeque<T>();
         //Traversere binærtreet i nivå orden og flytte verdiene over i en deque.
+        Node<T> p = rot;
+        kø.addLast(p.verdi);
+        while (!kø.isEmpty()) {
+            p.verdi = kø.removeFirst();
+            list.add(p.verdi);
+
+            if (p.venstre != null) {
+                kø.addLast(p.venstre.verdi);
+            }
+            if (p.høyre != null) {
+                kø.addLast(p.høyre.verdi);
+            }
+        }
 
         //Gå igjennom deque og flytte verdiene inn i arraylist
 
