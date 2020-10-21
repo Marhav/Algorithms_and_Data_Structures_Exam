@@ -178,7 +178,16 @@ public class EksamenSBinTre<T> {
     }
 
     public ArrayList<T> serialize() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        //Opprette arraylist
+        ArrayList<T> list = new ArrayList<>();
+
+        //Opprette deque
+        //Traversere binærtreet i nivå orden og flytte verdiene over i en deque.
+
+        //Gå igjennom deque og flytte verdiene inn i arraylist
+
+        //Returnere arraylist
+        return list;
     }
 
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
