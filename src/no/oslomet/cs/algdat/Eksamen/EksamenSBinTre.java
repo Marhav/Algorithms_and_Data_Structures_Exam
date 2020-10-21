@@ -137,33 +137,28 @@ public class EksamenSBinTre<T> {
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
-
-        if(p.venstre != null) return førstePostorden(p.venstre);
-        else if(p.høyre != null) return førstePostorden(p.høyre);
-        else return p;
+            if (p.venstre != null) return førstePostorden(p.venstre);   //Venstre barn eksisterer.
+            else if (p.høyre != null) return førstePostorden(p.høyre);  //Ingen venstre barn, men høyre barn eksisterer.
+            else return p;                                              //Funnet bladnode lengs til venstre.
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-        Node<T> q = førstePostorden(p);
-        Node<T> r = q.forelder;
-        //p er rotnoden(siste i postorden)
-        if(r == null){
-            return null;
-        }
-        //Hvis p er venstre barn til sin forelder f, gjelder:
-            //Hvis p er enebarn (f.høyre er null), er forelderen f den neste.
-            //Hvis p ikke er enebarn (dvs. f.høyre er ikke null), så er den neste den noden som kommer først i postorden i subtreet med f.høyre som rot.
-        if(r.venstre.equals(q)){
-            if(r.høyre.equals(null)){
-                return r;
-            }
-            else{
-                førstePostorden(r.høyre);
-            }
-        }
-        //p er høyre barn til sin forelder f
-        return r;
+        if (p.venstre != null) return p.venstre;   //Venstre barn eksisterer.
+        else if (p.høyre != null) return p.høyre;  //Ingen venstre barn, men høyre barn eksisterer.
 
+        else {
+            Node<T> q = p.forelder;
+            if (q == null) {                      //p er rotnoden(siste i postorden)
+                return null;
+            }
+            //Hvis p er venstre barn til sin forelder f, gjelder:
+            if (q.venstre.equals(q) && q.høyre.equals(null)) {            //Hvis p er enebarn (f.høyre er null), er forelderen f den neste.
+                    return q;
+            }else if (q.venstre.equals(q)){                           //Hvis p ikke er enebarn (dvs. f.høyre er ikke null), så er den neste den noden som kommer først i postorden i subtreet med f.høyre som rot.
+                return førstePostorden(q.høyre);
+            }
+            return q;                               //p er høyre barn til sin forelder f
+        }
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
