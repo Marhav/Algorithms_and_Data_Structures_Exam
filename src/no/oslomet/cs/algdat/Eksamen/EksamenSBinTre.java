@@ -179,23 +179,23 @@ public class EksamenSBinTre<T> {
 
     public ArrayList<T> serialize() {
         //Opprette arraylist
-        ArrayList<T> list = new ArrayList<>();
+        ArrayList<T> list = new ArrayList<T>();
 
         //Opprette deque
-        ArrayDeque<T> kø = new ArrayDeque<T>();
+        ArrayDeque<Node<T>> kø = new ArrayDeque<Node<T>>();
 
         //Traversere binærtreet i nivå orden og flytte verdiene over i en deque.
         Node<T> p = rot;
-        kø.addLast(p.verdi);
+        kø.addLast(p);
         while (!kø.isEmpty()) { //Gå igjennom deque og flytte verdiene inn i arraylist
-            p.verdi = kø.removeFirst();
+            p = kø.removeFirst();
             list.add(p.verdi);
 
             if (p.venstre != null) {
-                kø.addLast(p.venstre.verdi);
+                kø.addLast(p.venstre);
             }
             if (p.høyre != null) {
-                kø.addLast(p.høyre.verdi);
+                kø.addLast(p.høyre);
             }
         }
         //Returnere arraylist
