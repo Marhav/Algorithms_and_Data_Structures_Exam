@@ -89,7 +89,7 @@ public class EksamenSBinTre<T> {
         Node<T> current = rot;
         Node<T> currentLast = null;
         int comparator = 0;
-        while(current !=null) {                                               //Går ut av løkken når man kommer til en node med child peker som peker på null.
+        while (current != null) {                                               //Går ut av løkken når man kommer til en node med child peker som peker på null.
             currentLast = current;
             comparator = comp.compare(verdi, current.verdi);
             current = comparator < 0 ? current.venstre : current.høyre;       //Hopper til høyre om verdi er større enn en nodes verdi, eller til venstre dersom verdi er mindre.
@@ -98,7 +98,7 @@ public class EksamenSBinTre<T> {
         //Opprett en ny node på plassen man fant i løkken over.
         current = new Node<>(verdi, currentLast);
 
-        if (currentLast== null) rot = current;                                  // Current blir rotnode
+        if (currentLast == null) rot = current;                                  // Current blir rotnode
         else if (comparator < 0) currentLast.venstre = current;                 // Venstre barn blir current
         else currentLast.høyre = current;                                       // Høyre barn blir currnet
 
@@ -116,18 +116,17 @@ public class EksamenSBinTre<T> {
 
     public int antall(T verdi) {                //Sjekket hvordan inneholder fungerer, tror ikke den kan brukes her, men en liknende metode som fortsetter å lete, selv etter funn kan fungere.
         int teller = 0;
-                                                //Her har jeg kopiert og modifisert kode fra inneholder(T verdi) metoden.
+        //Her har jeg kopiert og modifisert kode fra inneholder(T verdi) metoden.
         if (verdi == null) return teller;       //Sjekker om verdi er null, returnerer evt 0 som oppgaven ber om.
 
         Node<T> p = rot;
 
         while (p != null) {
             int cmp = comp.compare(verdi, p.verdi);
-            if(cmp == 0){
+            if (cmp == 0) {
                 teller++;
                 p = p.høyre;
-            }
-            else p = cmp < 0 ? p.venstre : p.høyre;
+            } else p = cmp < 0 ? p.venstre : p.høyre;
         }
         return teller;
     }
@@ -137,29 +136,27 @@ public class EksamenSBinTre<T> {
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
-            if (p.venstre != null) return førstePostorden(p.venstre);   //Venstre barn eksisterer.
-            else if (p.høyre != null) return førstePostorden(p.høyre);  //Ingen venstre barn, men høyre barn eksisterer.
-            else return p;                                              //Funnet bladnode lengs til venstre.
+        while (p.venstre != null || p.høyre != null) {
+            if (p.venstre != null) p = p.venstre;       //Venstre barn eksisterer.
+            else p = p.høyre;                           //Ingen venstre barn, men høyre barn eksisterer.
+        }
+        return p;                                       //Funnet bladnode lengs til venstre.
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-        if (p.venstre != null) return p.venstre;   //Venstre barn eksisterer.
-        else if (p.høyre != null) return p.høyre;  //Ingen venstre barn, men høyre barn eksisterer.
-
-        else {
             Node<T> q = p.forelder;
-            if (q == null) {                      //p er rotnoden(siste i postorden)
+            if (q == null) {                                         //p er rotnoden(siste i postorden)
                 return null;
+            }else if (q.høyre == p) {                                //p er høyre barn til sin forelder.
+                return q;
             }
-            //Hvis p er venstre barn til sin forelder f, gjelder:
-            if (q.venstre.equals(q) && q.høyre.equals(null)) {            //Hvis p er enebarn (f.høyre er null), er forelderen f den neste.
-                    return q;
-            }else if (q.venstre.equals(q)){                           //Hvis p ikke er enebarn (dvs. f.høyre er ikke null), så er den neste den noden som kommer først i postorden i subtreet med f.høyre som rot.
-                return førstePostorden(q.høyre);
+            else if (q.venstre == p && q.høyre == null) {            //p venstre barn til sin forelder og enebarn.
+                return q;
             }
-            return q;                               //p er høyre barn til sin forelder f
-        }
+        return førstePostorden(q.høyre);                             //p er venstre barn til sin forelder, men ikke enebarn.
     }
+
+
 
     public void postorden(Oppgave<? super T> oppgave) {
         throw new UnsupportedOperationException("Ikke kodet ennå!");
