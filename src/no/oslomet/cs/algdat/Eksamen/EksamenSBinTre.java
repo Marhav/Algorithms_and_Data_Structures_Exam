@@ -183,10 +183,11 @@ public class EksamenSBinTre<T> {
 
         //Opprette deque
         ArrayDeque<T> kø = new ArrayDeque<T>();
+
         //Traversere binærtreet i nivå orden og flytte verdiene over i en deque.
         Node<T> p = rot;
         kø.addLast(p.verdi);
-        while (!kø.isEmpty()) {
+        while (!kø.isEmpty()) { //Gå igjennom deque og flytte verdiene inn i arraylist
             p.verdi = kø.removeFirst();
             list.add(p.verdi);
 
@@ -197,15 +198,30 @@ public class EksamenSBinTre<T> {
                 kø.addLast(p.høyre.verdi);
             }
         }
-
-        //Gå igjennom deque og flytte verdiene inn i arraylist
-
         //Returnere arraylist
         return list;
     }
 
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        EksamenSBinTre<K> tre = new EksamenSBinTre<K>(c);
+
+        tre.rot.verdi = data.get(0);
+        Node<K> current = tre.rot;
+        Node<K> currentLast = null;
+
+        int cmp;
+        for (int i = 1; i < data.size(); i++){
+            currentLast = current;
+            cmp = c.compare(data.get(i), current.verdi);
+            if(cmp>=0){
+                current.høyre = new Node<K>(data.get(i), currentLast);
+                current = current.høyre;
+            } else if(cmp<0){
+                current.venstre = new Node<K>(data.get(i), currentLast);
+                current = current.venstre;
+            }
+        }
+        return tre;
     }
 
 
