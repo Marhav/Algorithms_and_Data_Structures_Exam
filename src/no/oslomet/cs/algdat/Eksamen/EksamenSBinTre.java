@@ -86,6 +86,8 @@ public class EksamenSBinTre<T> {
 
         //Løkke som sammenlikner verdi med verdier i treet.
         //Brukt Programkode 5.2.3 a) som referanse.
+        if(rot == null) rot.verdi = verdi;                                  //Sjekker at rot ikke er null.
+
         Node<T> current = rot;
         Node<T> currentLast = null;
         int comparator = 0;
@@ -107,11 +109,54 @@ public class EksamenSBinTre<T> {
     }
 
     public boolean fjern(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        //Kopiert Programkode 5.2.8 d) fra kompendiet.
+        if (verdi == null) return false;  // treet har ingen nullverdier
+
+        Node<T> p = rot, q = null;   // q skal være forelder til p
+
+        while (p != null)            // leter etter verdi
+        {
+            int cmp = comp.compare(verdi,p.verdi);      // sammenligner
+            if (cmp < 0) { q = p; p = p.venstre; }      // går til venstre
+            else if (cmp > 0) { q = p; p = p.høyre; }   // går til høyre
+            else break;    // den søkte verdien ligger i p
+        }
+        if (p == null) return false;   // finner ikke verdi
+
+        if (p.venstre == null || p.høyre == null)  // En av barnepekerene er null
+        {
+            Node<T> b = p.venstre != null ? p.venstre : p.høyre;  // Finner ut hvilket ben som ikke er null.
+            if (p == rot) rot = b;                                //Spesialtilfelle hvor p fremdeles er rot(
+            else if (p == q.venstre) q.venstre = b;               //Hvis p er venstre barnet til sin forelder, settes denne forelders venstre peker til p sitt barn.
+            else q.høyre = b;                                     //Hvis p er høyre barnet til sin forelder, settes denne forelders høyre peker til p sitt barn.
+            if(q != null && b != null) b.forelder = q;                                       //Setter foreldrepekeren til b til sin besteforelder q.
+        }
+        else  // Tilfelle 3)
+        {
+            Node<T> s = p, r = p.høyre;   // finner neste i inorden
+            while (r.venstre != null)
+            {
+                s = r;    // s er forelder til r
+                r = r.venstre;
+            }
+
+            p.verdi = r.verdi;   // kopierer verdien i r til p
+
+            if (s != p) s.venstre = r.høyre;
+            else s.høyre = r.høyre;
+        }
+
+        antall--;   // det er nå én node mindre i treet
+        return true;
     }
 
     public int fjernAlle(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if(tom()) return 0;
+        int teller = 0;
+        for(int i = 0; i < antall(); i++){
+            if(fjern(verdi)) teller++;
+        }
+        return teller;
     }
 
     public int antall(T verdi) {                //Sjekket hvordan inneholder fungerer, tror ikke den kan brukes her, men en liknende metode som fortsetter å lete, selv etter funn kan fungere.
@@ -132,7 +177,18 @@ public class EksamenSBinTre<T> {
     }
 
     public void nullstill() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        ArrayDeque<Node<T>> que = new ArrayDeque<>();
+        Node<T> p = null;
+        que.addLast(rot);
+
+        while (!que.isEmpty()) {
+            p = que.removeFirst();
+            if(p.venstre != null) que.addLast(p.venstre);
+            if(p.høyre != null) que.addLast(p.venstre);
+            p.forelder = p.venstre = p.høyre = null;
+            p.verdi = null;
+            antall--;
+        }
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
