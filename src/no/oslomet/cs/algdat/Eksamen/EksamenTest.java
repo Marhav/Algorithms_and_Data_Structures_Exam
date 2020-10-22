@@ -374,7 +374,7 @@ public class EksamenTest {
         s = tre.toStringPostOrder();
         if (!s.equals("[2, 3, 4]")) {
             antallFeil++;
-            System.out.println(antallFeil + "Oppgave 6u: Feil i fjernAlle(T)!");
+            System.out.println("Oppgave 6u: Feil i fjernAlle(T)!");
         }
 
         tre = new EksamenSBinTre<>(Comparator.naturalOrder());
