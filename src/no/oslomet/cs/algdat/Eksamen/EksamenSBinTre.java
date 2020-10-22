@@ -86,16 +86,17 @@ public class EksamenSBinTre<T> {
 
         //Løkke som sammenlikner verdi med verdier i treet.
         //Brukt Programkode 5.2.3 a) som referanse.
-        if(rot == null) rot.verdi = verdi;                                  //Sjekker at rot ikke er null.
+
 
         Node<T> current = rot;
         Node<T> currentLast = null;
         int comparator = 0;
-        while (current != null) {                                               //Går ut av løkken når man kommer til en node med child peker som peker på null.
+        while (current != null) {                                               //Går ut av løkken når man kommer til en node med barne peker som peker på null.
             currentLast = current;
             comparator = comp.compare(verdi, current.verdi);
             current = comparator < 0 ? current.venstre : current.høyre;       //Hopper til høyre om verdi er større enn en nodes verdi, eller til venstre dersom verdi er mindre.
         }
+
 
         //Opprett en ny node på plassen man fant i løkken over.
         current = new Node<>(verdi, currentLast);
@@ -129,7 +130,8 @@ public class EksamenSBinTre<T> {
             if (p == rot) rot = b;                                //Spesialtilfelle hvor p fremdeles er rot(
             else if (p == q.venstre) q.venstre = b;               //Hvis p er venstre barnet til sin forelder, settes denne forelders venstre peker til p sitt barn.
             else q.høyre = b;                                     //Hvis p er høyre barnet til sin forelder, settes denne forelders høyre peker til p sitt barn.
-            if(q != null && b != null) b.forelder = q;                                       //Setter foreldrepekeren til b til sin besteforelder q.
+            if(q != null && b != null) b.forelder = q;            //Setter foreldrepekeren til b til sin besteforelder q.
+            else if(q == null && b != null) b.forelder = null;
         }
         else  // Tilfelle 3)
         {
@@ -151,9 +153,8 @@ public class EksamenSBinTre<T> {
     }
 
     public int fjernAlle(T verdi) {
-        if(tom()) return 0;
         int teller = 0;
-        for(int i = 0; i < antall(); i++){
+        for(int i = 0; i <= antall(); i++){
             if(fjern(verdi)) teller++;
         }
         return teller;
@@ -177,17 +178,17 @@ public class EksamenSBinTre<T> {
     }
 
     public void nullstill() {
-        ArrayDeque<Node<T>> que = new ArrayDeque<>();
-        Node<T> p = null;
-        que.addLast(rot);
+        if(!tom()) {
+            ArrayDeque<Node<T>> que = new ArrayDeque<>();
+            Node<T> p = rot;
+            que.addLast(p);
 
-        while (!que.isEmpty()) {
-            p = que.removeFirst();
-            if(p.venstre != null) que.addLast(p.venstre);
-            if(p.høyre != null) que.addLast(p.venstre);
-            p.forelder = p.venstre = p.høyre = null;
-            p.verdi = null;
-            antall--;
+            while (!que.isEmpty()) {
+                p = que.removeFirst();
+                if (p.venstre != null) que.addLast(p.venstre);
+                if (p.høyre != null) que.addLast(p.høyre);
+                fjern(p.verdi);
+            }
         }
     }
 
